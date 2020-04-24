@@ -23,15 +23,3 @@
     align-items: center;
 }
 
-.btn-secondary{
-    background: var(--color-full-white);
-    color: var(--color-black);
-    box-shadow: none;
-}
-
-.btn-white {
-    background-color: var(--color-full-white);
-    color: var(--color-white);
-    border: var(---border-minimal) var(--color-white);
-    box-shadow: none;
-}

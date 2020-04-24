@@ -1,0 +1,49 @@
+:root {
+    --skeleton-task-background: var(--color-white);
+    --skeleton-text-background: var(--color-white-6);
+    --skeleton-boxshadow: var(--box-shadow-medium) var(--box-shadow-dark);
+
+}
+[data-theme="dark"] {
+    --skeleton-task-background: var(--color-black);
+    --skeleton-text-background: var(--color-black-6);
+    --skeleton-boxshadow: var(--box-shadow-small) var(--box-shadow-dark);
+}
+
+.skeleton {
+    box-sizing: border-box;
+    margin-top: var(--spacing-x-large);
+}
+
+.skeleton__task {
+    box-sizing: border-box;
+    width: 100%;
+    height: 110px;
+    border-radius: var(--border-radius-small);
+    box-shadow: var(--skeleton-boxshadow);
+    background-color: var(--skeleton-task-background);
+    margin-bottom: var(--spacing-large);
+    padding: var(--spacing-medium);
+}
+
+.skeleton__text {
+    height: 16px;
+    background: var(--skeleton-text-background);
+    margin-bottom: var(--spacing-medium);
+    border-radius: var(--border-radius-small);
+
+}
+
+.skeleton__text:nth-child(1) {
+    width: 80%;
+
+}
+
+.skeleton__text:nth-child(2) {
+    width: 60%;
+
+}
+
+.skeleton__text:nth-child(3) {
+    width: 70%;
+}

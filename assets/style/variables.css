@@ -1,61 +1,60 @@
 
 
 :root {
-    --box-shadow-light: rgba(0, 0, 0, 0.1);
+    /* Global */
+    --container-max-width: 1024px;
+
+    /* Box Shaddow */
+    --box-shadow-dark: rgba(0, 0, 0, 0.1);
+    --box-shadow-light: rgba(255, 255, 255, 0.4);
+    --box-shadow-small: 0 4px 12px;
+    --box-shadow-medium: 0 4px 16px;
     --box-shadow-large: 0 4px 32px;
 
-
-
-
-
-
-    --box-shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.1);
-
-
-
-
-
-    ---border-minimal: 1px solid;
+    /* Borders */
+    --border-minimal: 1px solid;
     --border-radius-small: 4px;
     --border-radius-medium: 12px;
     --border-radius-circle: 50%;
 
 
-
+    /* Colors */
     --color-primary: #2989d8;
     --color-success: #33a532;
     --color-danger: #CC0000;
     --color-white: #efefef;
+
     --color-full-white: #fff;
+    --color-white-6: #aaa;
     --color-black: #111111;
-    --color-black-2: #222222;
+
+    --color-black: #222222;
+    --color-black-6: #666666;
     --color-full-black: #000000;
 
-    --color-light: #aaa;
-
-
-    --container-max-width: 1024px;
     --color-gradient-primary: linear-gradient(to right, #2989d8 0%,#1e5799 49%,#2989d8 100%);
+    --color-gradient-inverted: linear-gradient(to right,#1e5799 0%,#2989d8 49%,#1e5799 100%);
 
+    /* Fonts */
+    --font-size-small: 14px;
+    --font-size-medium: 16px;
+    --font-size-large: 24px;
     --font-main: 'Roboto', sans-serif;
     --font-weight-nomral: 300;
     --font-weight-wide: 400;
     --font-line-height-medium: 1.6;
 
-
-
+    /* Spacings*/
     --spacing-x-small: 4px;
     --spacing-small: 8px;
     --spacing-medium: 16px;
     --spacing-large: 24px;
     --spacing-x-large: 40px;
 
+    /* Icons */
     --icon-height-small: 24px;
     --icon-height-medium: 40px;
     --icon-height-large: 72px;
     --icon-height-x-large: 104px;
 
-    --font-size-small: 14px;
-    --font-size-medium: 16px;
-    --font-size-large: 24px;
 }
