@@ -1,81 +1,58 @@
 @import 'normalize.css';
 @import 'variables.css';
+@import 'common.css';
+@import 'header.css';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
 
-header {
-    box-shadow: var(--box-shadow-large);
+
+
+/******************
+***** HEADER ******
+******************/
+
+
+.skeleton {
+    margin-top: var(--spacing-x-large);
+    box-sizing: border-box;
 }
 
-.container {
+.skeleton__task {
     box-sizing: border-box;
     width: 100%;
-    max-width: var(--container-max-width);
-    margin-left: auto;
-    margin-right: auto;
-    padding-right: var(--spacing-medium);
-    padding-left: var(--spacing-medium);
-}
-
-.btn {
-    background: var(--color-primary);
-    font-family: var(--font-main);
-    font-weight: var(--font-weight-nomral);
-    border: none;
-    box-shadow: var(--box-shadow-medium);
+    height: 110px;
     border-radius: var(--border-radius-small);
-    padding: var(--spacing-small) var(--spacing-medium);
-    cursor: pointer;
-    color: var(--color-full-white);
-    display: flex;
-    align-items: center;
+    box-shadow: var(--box-shadow-medium);
+    background-color: #eee;
+    margin-bottom: var(--spacing-large);
+    padding: var(--spacing-medium);
 }
 
-.btn-secondary{
-    background: var(--color-full-white);
-    color: var(--color-black);
-    box-shadow: none;
+.skeleton__text {
+    height: 16px;
+    background: #aaa;
+    margin-bottom: var(--spacing-medium);
+    border-radius: var(--border-radius-small);
+
 }
 
-.btn-white {
-    background-color: var(--color-full-white);
-    color: var(--color-white);
-    border: var(---border-minimal) var(--color-white);
-    box-shadow: none;
+.skeleton__text:nth-child(1) {
+    width: 80%;
+
 }
 
-.btn-black {
-    background-color: var(--color-black);
+.skeleton__text:nth-child(2) {
+    width: 60%;
+
 }
 
-.blue {
-    background-image: var(--color-gradient-primary);
-    height: var(--spacing-small);
-    width: 100%;
+.skeleton__text:nth-child(3) {
+    width: 70%;
 }
 
-.logo {
-    height: var(--icon-height-large);
-}
 
-.main {
-    padding-top: var(--spacing-medium);
-    font-weight: var(--font-weight-nomral);
-}
 
-.header-content {
-    display: flex;
-    font-size: var(--font-size-medium);
-    padding-top: var(--spacing-medium);
-    padding-bottom: var(--spacing-medium);
-    align-items: center;
-    justify-content: space-between;
-}
 
-.theme-switcher--logo {
-    height: var(--icon-height-small);
-    padding-right: var(--spacing-small);
-    color: var(--color-white);
-}
+
 
 .add-button {
     background: var(--color-success);
@@ -156,6 +133,7 @@ header {
 
 .task-list {
     margin-top: var(--spacing-x-large);
+    flex-direction: column;
 }
 
 .task-list--empty {
@@ -178,3 +156,59 @@ header {
     margin-bottom: var(--spacing-medium);
 }
 
+.task-list__task {
+    width: 100%;
+    box-shadow: var(--box-shadow-medium);
+    border-radius: var(--border-radius-small);
+    display: flex;
+    flex-direction: row;
+}
+
+.task__status {
+    width: var(--spacing-small);
+    background-color: var(--color-success);
+    border-top-left-radius: var(--border-radius-small);
+    border-bottom-left-radius: var(--border-radius-small);
+}
+
+.task__content {
+    font-family: var(--font-main);
+    padding: var(--spacing-small);
+    flex: 1;
+}
+
+.task__header {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task__due-date {
+    color: var(--color-light);
+    font-size: var(--font-size-small);
+    font-weight: 400;
+}
+
+.task__importance {
+    background: #2989d8;
+    font-weight: var(--font-weight-wide);
+    font-size: var(--font-size-small);
+    border-radius: var(--border-radius-medium);
+    color: var(--color-white);
+    padding: var(--spacing-x-small)  var(--spacing-medium);
+}
+
+.task__title {
+    margin-top: var(--spacing-medium);
+    color: var(--color-black);
+    font-weight: 500;
+}
+
+.task__creation {
+    margin-top: var(--spacing-medium);
+    font-size: var(--font-size-small);
+    color: var(--color-light);
+
+}

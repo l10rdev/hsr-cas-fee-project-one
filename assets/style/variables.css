@@ -1,12 +1,26 @@
 
 
 :root {
-    ---border-minimal: 1px solid;
-    --border-radius-small: 4px;
-    --border-radius-circle: 50%;
+    --box-shadow-light: rgba(0, 0, 0, 0.1);
+    --box-shadow-large: 0 4px 32px;
+
+
+
+
+
 
     --box-shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.1);
-    --box-shadow-large: 0 4px 32px rgba(0, 0, 0, 0.1);
+
+
+
+
+
+    ---border-minimal: 1px solid;
+    --border-radius-small: 4px;
+    --border-radius-medium: 12px;
+    --border-radius-circle: 50%;
+
+
 
     --color-primary: #2989d8;
     --color-success: #33a532;
@@ -15,7 +29,7 @@
     --color-full-white: #fff;
     --color-black: #111111;
 
-
+    --color-light: #aaa;
 
 
     --container-max-width: 1024px;
@@ -32,13 +46,14 @@
     --spacing-small: 8px;
     --spacing-medium: 16px;
     --spacing-large: 24px;
-    --spacing-x-large: 24px;
+    --spacing-x-large: 40px;
 
     --icon-height-small: 24px;
     --icon-height-medium: 40px;
     --icon-height-large: 72px;
     --icon-height-x-large: 104px;
 
+    --font-size-small: 14px;
     --font-size-medium: 16px;
     --font-size-large: 24px;
 }
