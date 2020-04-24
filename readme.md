@@ -10,14 +10,20 @@ The goal of the project is to implement an other ToDo-Application using simple H
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 See deployment for notes on how to deploy the project on a live system.
 
+## App Preview
+There is an Preview of this app on Heroku: https://cas-hsr-fee-project-1.herokuapp.com/
+The loading can take some time due to Herokus free service.
+
 ### Prerequisites
-
-
 
 ### Installing
 
 ```
-In this version no installig is needed 😎
+npm i
+```
+
+```
+npm start
 ```
 
 ## Running the tests
@@ -34,11 +40,6 @@ There are no tests included yet.
 ## Deployment
 
 Add additional notes about how to deploy this on a live system
-
-## Built With
-
-
-
 
 ## Authors
 
