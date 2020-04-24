@@ -1,0 +1,180 @@
+@import 'normalize.css';
+@import 'variables.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
+
+header {
+    box-shadow: var(--box-shadow-large);
+}
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: var(--spacing-medium);
+    padding-left: var(--spacing-medium);
+}
+
+.btn {
+    background: var(--color-primary);
+    font-family: var(--font-main);
+    font-weight: var(--font-weight-nomral);
+    border: none;
+    box-shadow: var(--box-shadow-medium);
+    border-radius: var(--border-radius-small);
+    padding: var(--spacing-small) var(--spacing-medium);
+    cursor: pointer;
+    color: var(--color-full-white);
+    display: flex;
+    align-items: center;
+}
+
+.btn-secondary{
+    background: var(--color-full-white);
+    color: var(--color-black);
+    box-shadow: none;
+}
+
+.btn-white {
+    background-color: var(--color-full-white);
+    color: var(--color-white);
+    border: var(---border-minimal) var(--color-white);
+    box-shadow: none;
+}
+
+.btn-black {
+    background-color: var(--color-black);
+}
+
+.blue {
+    background-image: var(--color-gradient-primary);
+    height: var(--spacing-small);
+    width: 100%;
+}
+
+.logo {
+    height: var(--icon-height-large);
+}
+
+.main {
+    padding-top: var(--spacing-medium);
+    font-weight: var(--font-weight-nomral);
+}
+
+.header-content {
+    display: flex;
+    font-size: var(--font-size-medium);
+    padding-top: var(--spacing-medium);
+    padding-bottom: var(--spacing-medium);
+    align-items: center;
+    justify-content: space-between;
+}
+
+.theme-switcher--logo {
+    height: var(--icon-height-small);
+    padding-right: var(--spacing-small);
+    color: var(--color-white);
+}
+
+.add-button {
+    background: var(--color-success);
+    box-shadow:  var(--box-shadow-large);
+    font-size: var(--font-size-large);
+    color: var(--color-full-white);
+    width: var(--icon-height-medium);
+    height: var(--icon-height-medium);
+    border-radius: var(--border-radius-circle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: var(--spacing-large);
+    right: var(--spacing-large);
+}
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.filter-order {
+    display: flex;
+    flex-direction: column;
+}
+
+.filters__inOrExcluding-filter {
+    margin-top: var(--spacing-small);
+    color: var(--color-success);
+    justify-content: center;
+}
+
+.filters__inOrExcluding-filter--including {
+    color: var(--color-danger);
+}
+
+.filter-order--radio {
+    visibility:hidden;
+    width: 0;
+    height: 0;
+}
+
+.filter-order--label {
+    text-align: center;
+    font-family: var(--font-main);
+    font-weight: var(--font-weight-nomral);
+    width: 100%;
+    padding-top: var(--spacing-x-small);
+    padding-bottom: var(--spacing-x-small);
+}
+
+.filter-order--selector-wrapper {
+    border: var(---border-minimal) var(--color-primary);
+    display: flex;
+}
+
+.filter-order--selector-wrapper:first-child {
+    border-top-right-radius: var(--border-radius-small);
+    border-top-left-radius: var(--border-radius-small);
+}
+
+.filter-order--selector-wrapper:last-child {
+    border-bottom-right-radius: var(--border-radius-small);
+    border-bottom-left-radius: var(--border-radius-small);
+}
+
+.filter-order--selector-wrapper:nth-child(2) {
+    border-top: none;
+    border-bottom: none;
+}
+
+.filter-order--radio:checked ~ .filter-order--label {
+    color: var(--color-white);
+    background-color: var(--color-primary);
+}
+
+.task-list {
+    margin-top: var(--spacing-x-large);
+}
+
+.task-list--empty {
+    padding-top: var(--spacing-medium);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-main);
+    font-weight: var(--font-weight-wide);
+    justify-content: center;
+    font-size: 20px;
+    align-items: center;
+    text-align: center;
+    line-height: var(--font-line-height-medium);
+}
+
+.task-list--empty > img {
+    width: var(--icon-height-x-large);
+    height: var(--icon-height-x-large);
+    margin-right: -24px;
+    margin-bottom: var(--spacing-medium);
+}
+
