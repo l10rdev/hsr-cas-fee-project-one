@@ -4,7 +4,22 @@
 @import 'header.css';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
 
+:root {
+    --body-background-color: var(--color-full-white);
+}
 
+[data-theme="dark"] {
+    --body-background-color: var(--color-full-black);
+}
+
+body {
+    background-color: var(--body-background-color);
+}
+
+.main {
+    padding-top: var(--spacing-medium);
+    font-weight: var(--font-weight-nomral);
+}
 
 /******************
 ***** HEADER ******
