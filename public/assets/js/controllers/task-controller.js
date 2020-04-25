@@ -71,10 +71,7 @@ export class TaskController {
 
 
     initEventListeners() {
-        setTimeout(() => {
-            document.getElementById('add-task-button').addEventListener('click', () => this.addTask());
-
-        }, 10)
+        document.getElementById('add-task-button').addEventListener('click', () => this.addTask());
     }
 
     addTask() {
