@@ -10,8 +10,6 @@ export class HeaderController {
             console.log('test');
             document.documentElement.removeAttribute('data-theme');
         });
-
-
     }
 
     init() {
