@@ -71,11 +71,11 @@ export class TaskController {
 
     init() {
         console.log('test');
-        // setTimeout(() => this.renderTaskView(), 1000);
+        this.renderTaskView();
     }
 
     async renderTaskView() {
-        this.taskContainer.innerHTML = this.taskTemplateCompiled({
+        /* this.taskContainer.innerHTML = this.taskTemplateCompiled({
             tasks: [{
                 title: 'Lorem Impsum',
                 priority: 'Low',
@@ -87,7 +87,7 @@ export class TaskController {
                 dueDate: '14.05.2020',
                 createdAt: '10.04.2020',
             }]
-        });
+        }); */
     }
 
     static bootstrap({taskService}) {

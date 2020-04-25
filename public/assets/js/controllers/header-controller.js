@@ -9,6 +9,14 @@ export class HeaderController {
             document.documentElement.removeAttribute('data-theme');
         });
 
+       document.querySelector('.header__them-switcher--light').addEventListener('tab', () => {
+           document.documentElement.setAttribute('data-theme', 'dark');
+       });
+
+       document.querySelector('.header__them-switcher--dark').addEventListener('tab', () => {
+           document.documentElement.removeAttribute('data-theme');
+       });
+
     }
 
     init() {
