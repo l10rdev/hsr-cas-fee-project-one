@@ -2,20 +2,15 @@ export class HeaderController {
 
    addEventListeners() {
         document.querySelector('.header__them-switcher--light').addEventListener('click', () => {
+            console.log('test');
             document.documentElement.setAttribute('data-theme', 'dark');
         });
 
         document.querySelector('.header__them-switcher--dark').addEventListener('click', () => {
+            console.log('test');
             document.documentElement.removeAttribute('data-theme');
         });
 
-       document.querySelector('.header__them-switcher--light').addEventListener('tab', () => {
-           document.documentElement.setAttribute('data-theme', 'dark');
-       });
-
-       document.querySelector('.header__them-switcher--dark').addEventListener('tab', () => {
-           document.documentElement.removeAttribute('data-theme');
-       });
 
     }
 
