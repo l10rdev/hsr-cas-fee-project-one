@@ -1,6 +1,8 @@
 
 export class TaskController {
-    template = `
+
+    constructor(taskService) {
+        this.template = `
 <div class="container">
     <div class="filter">
             <div class="filter-order">
@@ -60,7 +62,6 @@ export class TaskController {
     <button class="btn add-button">+</button>
 `;
 
-    constructor(taskService) {
         this.taskService = taskService;
         /*this.taskTemplateCompiled = Handlebars.compile(
             document.querySelector('#tasklist-template').innerHTML
