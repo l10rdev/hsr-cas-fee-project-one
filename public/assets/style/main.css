@@ -3,7 +3,8 @@
 @import 'common.css';
 @import 'header.css';
 @import 'skelton.css';
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
+@import 'task-list.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 
 :root {
     --body-background-color: var(--color-full-white);
@@ -17,9 +18,8 @@ body {
     background-color: var(--body-background-color);
 }
 
-.main {
-    padding-top: var(--spacing-medium);
-    font-weight: var(--font-weight-nomral);
+#main {
+    margin-top: 140px;
 }
 
 
@@ -32,158 +32,4 @@ body {
 
 
 
-.add-button {
-    background: var(--color-success);
-    box-shadow:  var(--box-shadow-large);
-    font-size: var(--font-size-large);
-    color: var(--color-full-white);
-    width: var(--icon-height-medium);
-    height: var(--icon-height-medium);
-    border-radius: var(--border-radius-circle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    bottom: var(--spacing-large);
-    right: var(--spacing-large);
-}
 
-.filter {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.filter-order {
-    display: flex;
-    flex-direction: column;
-}
-
-.filters__inOrExcluding-filter {
-    margin-top: var(--spacing-small);
-    color: var(--color-success);
-    justify-content: center;
-}
-
-.filters__inOrExcluding-filter--including {
-    color: var(--color-danger);
-}
-
-.filter-order--radio {
-    visibility:hidden;
-    width: 0;
-    height: 0;
-}
-
-.filter-order--label {
-    text-align: center;
-    font-family: var(--font-main);
-    font-weight: var(--font-weight-nomral);
-    width: 100%;
-    padding-top: var(--spacing-x-small);
-    padding-bottom: var(--spacing-x-small);
-}
-
-.filter-order--selector-wrapper {
-    border: var(---border-minimal) var(--color-primary);
-    display: flex;
-}
-
-.filter-order--selector-wrapper:first-child {
-    border-top-right-radius: var(--border-radius-small);
-    border-top-left-radius: var(--border-radius-small);
-}
-
-.filter-order--selector-wrapper:last-child {
-    border-bottom-right-radius: var(--border-radius-small);
-    border-bottom-left-radius: var(--border-radius-small);
-}
-
-.filter-order--selector-wrapper:nth-child(2) {
-    border-top: none;
-    border-bottom: none;
-}
-
-.filter-order--radio:checked ~ .filter-order--label {
-    color: var(--color-white);
-    background-color: var(--color-primary);
-}
-
-.task-list {
-    margin-top: var(--spacing-x-large);
-    flex-direction: column;
-}
-
-.task-list--empty {
-    padding-top: var(--spacing-medium);
-    display: flex;
-    flex-direction: column;
-    font-family: var(--font-main);
-    font-weight: var(--font-weight-wide);
-    justify-content: center;
-    font-size: 20px;
-    align-items: center;
-    text-align: center;
-    line-height: var(--font-line-height-medium);
-}
-
-.task-list--empty > img {
-    width: var(--icon-height-x-large);
-    height: var(--icon-height-x-large);
-    margin-right: -24px;
-    margin-bottom: var(--spacing-medium);
-}
-
-.task-list__task {
-    width: 100%;
-    box-shadow: var(--box-shadow-medium);
-    border-radius: var(--border-radius-small);
-    display: flex;
-    flex-direction: row;
-}
-
-.task__status {
-    width: var(--spacing-small);
-    background-color: var(--color-success);
-    border-top-left-radius: var(--border-radius-small);
-    border-bottom-left-radius: var(--border-radius-small);
-}
-
-.task__content {
-    font-family: var(--font-main);
-    padding: var(--spacing-small);
-    flex: 1;
-}
-
-.task__header {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.task__due-date {
-    font-size: var(--font-size-small);
-    font-weight: 400;
-}
-
-.task__importance {
-    background: #2989d8;
-    font-weight: var(--font-weight-wide);
-    font-size: var(--font-size-small);
-    border-radius: var(--border-radius-medium);
-    color: var(--color-white);
-    padding: var(--spacing-x-small)  var(--spacing-medium);
-}
-
-.task__title {
-    margin-top: var(--spacing-medium);
-    color: var(--color-black);
-    font-weight: 500;
-}
-
-.task__creation {
-    margin-top: var(--spacing-medium);
-    font-size: var(--font-size-small);
-}

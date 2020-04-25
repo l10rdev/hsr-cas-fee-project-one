@@ -3,34 +3,31 @@ export class TaskController {
 
     constructor(taskService) {
         this.template = `
-<div class="container">
-    <div class="filter">
-            <div class="filter-order">
-                <div class="filter-order--selector-wrapper">
-                    <input type="radio" class="filter-order--radio" id="finish-date" name="filter-order" value="finish-date" checked="checked">
-                    <label class="filter-order--label" for="finish-date"> By finish Date</label>
-                </div>
-                <div class="filter-order--selector-wrapper">
-                    <input type="radio"  class="filter-order--radio" id="creation-date" name="filter-order" value="creation-date">
-                    <label class="filter-order--label" for="creation-date">By created Date</label>
-                </div>
-                <div class="filter-order--selector-wrapper">
-                    <input type="radio"  class="filter-order--radio" id="importance" name="filter-order" value="importance">
-                    <label class="filter-order--label" for="importance">By Importance</label>
-                </div>
+<div>
+    <section class="container">
+        <h1 class="welcome-message">Good Morning! <br /> Get It Done</h1>
+        <hr class="space-bar">
+        <div class="filters">
+            <div class="filters__order-filter">
+                <input type="radio" class="order-filter__radio" id="finish-date" name="order-filter" value="finish-date" checked="checked">
+                <label class="order-filter__label" for="finish-date"> Due Date</label>
+                <input type="radio"  class="order-filter__radio" id="creation-date" name="order-filter" value="creation-date">
+                <label class="order-filter__label" for="creation-date">Creation Date</label>
+                <input type="radio"  class="order-filter__radio" id="importance" name="order-filter" value="importance">
+                <label class="order-filter__label" for="importance">Importance</label>
             </div>
-            <button class="btn btn-secondary filters__inOrExcluding-filter filters__inOrExcluding-filter--excluding">
-                Include completed tasks.
+                    
+            <button class="btn filters__inExcluding-filter {{#if includingDoneTask}} filters__inExcluding-filter--including {{else}} filters__inExcluding-filter--excluding {{/if}}">
+               {{#if includingDoneTask}}Exclude completed tasks {{else}} Inclucde completed tasks{{/if}}
             </button>
-            <button class="btn btn-secondary filters__inOrExcluding-filter filters__inOrExcluding-filter--including">
-                Exclude completed tasks.
-            </button>
-   </div>
-    <div class="task-list">
+        </div>
+   </section>
+   <div class="section-spacer"></div>
+    <div class="container task-list">
         {{#if tasks}}
             {{#each tasks}}
-                <div class="task-list__task">
-                    <div class="task__status task__status--1"></div>
+                <div class="task">
+                    <div class="task__status task__status--{{status}}"></div>
                     <div class="task__content">
                         <div class="task__header">
                             <div class="task__importance">
@@ -46,20 +43,20 @@ export class TaskController {
                         </div>
 
                         <div class="task__creation">
-                            {{createdAt}}
+                            Created: {{createdAt}}
                         </div>
                     </div>
                 </div>
             {{/each}}
         {{else}}
-            <div class="task-list--empty">
-                <img class="theme-switcher--logo" src="assets/img/getan.svg" alt="Darth Vader"  />
+            <div class="task-list__block--empty">
+                <img class="task-list__block-image" src="assets/img/getan.svg" alt="Darth Vader"  />
                 You have no task. <br /> Enjoy your free day.
             </div>
         {{/if}}
     </div>
     </div>
-    <button class="btn add-button">+</button>
+    <button id="add-task-button" class="btn add-button">+</button>
 `;
 
         this.taskService = taskService;
@@ -68,27 +65,54 @@ export class TaskController {
         );*/
         this.taskTemplateCompiled = Handlebars.compile(this.template);
         this.taskContainer = document.querySelector('#main');
+        this.tasks = [];
+    }
+
+
+
+    initEventListeners() {
+        setTimeout(() => {
+            document.getElementById('add-task-button').addEventListener('click', () => this.addTask());
+
+        }, 10)
+    }
+
+    addTask() {
+        let status = '';
+        switch(this.tasks.length % 3) {
+            case 0:
+                status = 'ok';
+                break;
+            case 1:
+                status = 'endanger';
+                break;
+            case 2:
+                status = 'late';
+                break;
+        }
+
+        console.log('Hello');
+        this.tasks.push({
+            title: 'Lorem Impsum',
+            status,
+            priority: 'Low',
+            dueDate: '14.05.2020',
+            createdAt: '10.04.2020',
+        });
+
+        this.renderTaskView();
     }
 
     init() {
-        console.log('test');
         this.renderTaskView();
     }
 
     async renderTaskView() {
-        /* this.taskContainer.innerHTML = this.taskTemplateCompiled({
-            tasks: [{
-                title: 'Lorem Impsum',
-                priority: 'Low',
-                dueDate: '14.05.2020',
-                createdAt: '10.04.2020',
-            }, {
-                title: 'Lorem Impsum 2',
-                priority: 'Low',
-                dueDate: '14.05.2020',
-                createdAt: '10.04.2020',
-            }]
-        }); */
+        this.taskContainer.innerHTML = this.taskTemplateCompiled({
+            includingDoneTask: false,
+            tasks: this.tasks,
+        });
+        this.initEventListeners();
     }
 
     static bootstrap({taskService}) {
