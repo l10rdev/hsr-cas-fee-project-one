@@ -19,6 +19,13 @@
   },
   "homepage": "https://github.com/l10rdev/hsr-cas-fee-project-one#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "moment": "^2.25.3",
+    "nedb": "^1.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2"
   }
 }

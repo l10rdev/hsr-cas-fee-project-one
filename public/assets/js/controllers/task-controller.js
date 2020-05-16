@@ -1,3 +1,4 @@
+import {compareByDueDate, compareByCreationDate, compareByImportance} from '../helpers.js';
 
 export class TaskController {
 
@@ -9,15 +10,15 @@ export class TaskController {
         <hr class="space-bar">
         <div class="filters">
             <div class="filters__order-filter">
-                <input type="radio" class="order-filter__radio" id="finish-date" name="order-filter" value="finish-date" checked="checked">
+                <input type="radio" class="order-filter__radio" id="finish-date" name="order-filter" value="finish-date" {{#ifEquals orderStrategy "finish-date"}} checked {{/ifEquals}}>
                 <label class="order-filter__label" for="finish-date"> Due Date</label>
-                <input type="radio"  class="order-filter__radio" id="creation-date" name="order-filter" value="creation-date">
+                <input type="radio"  class="order-filter__radio" id="creation-date" name="order-filter" value="creation-date"   {{#ifEquals orderStrategy "creation-date"}} checked {{/ifEquals}}>
                 <label class="order-filter__label" for="creation-date">Creation Date</label>
-                <input type="radio"  class="order-filter__radio" id="importance" name="order-filter" value="importance">
+                <input type="radio"  class="order-filter__radio" id="importance" name="order-filter" value="importance"  {{#ifEquals orderStrategy "importance"}} checked {{/ifEquals}}>
                 <label class="order-filter__label" for="importance">Importance</label>
             </div>
                     
-            <button class="btn filters__inExcluding-filter {{#if includingDoneTask}} filters__inExcluding-filter--including {{else}} filters__inExcluding-filter--excluding {{/if}}">
+            <button id="including-done-task-switch" class="btn filters__inExcluding-filter {{#if includingDoneTask}} filters__inExcluding-filter--including {{else}} filters__inExcluding-filter--excluding {{/if}}">
                {{#if includingDoneTask}}Exclude completed tasks {{else}} Inclucde completed tasks{{/if}}
             </button>
         </div>
@@ -50,7 +51,7 @@ export class TaskController {
             {{/each}}
         {{else}}
             <div class="task-list__block--empty">
-                <img class="task-list__block-image" src="assets/img/getan.svg" alt="Darth Vader"  />
+                <img class="task-list__block-image" src="assets/img/getan.svg" alt="Darth Vader"  on/>
                 You have no task. <br /> Enjoy your free day.
             </div>
         {{/if}}
@@ -60,18 +61,33 @@ export class TaskController {
 `;
 
         this.taskService = taskService;
-        /*this.taskTemplateCompiled = Handlebars.compile(
-            document.querySelector('#tasklist-template').innerHTML
-        );*/
+        console.log('servies', taskService);
         this.taskTemplateCompiled = Handlebars.compile(this.template);
         this.taskContainer = document.querySelector('#main');
-        this.tasks = [];
+        this.visibleTasks = [];
+        this.orderStrategy = 'finish-date';
+        this.includingDoneTask = false;
     }
 
+    sortTasks(orderStrategy) {
+        this.orderStrategy = orderStrategy;
+        const orderStrategyMap = {
+            'creation-date': compareByCreationDate,
+            'importance': compareByImportance,
+            'finish-date': compareByDueDate,
+        };
+        this.visibleTasks = [...this.visibleTasks].sort(orderStrategyMap[orderStrategy]);
+        this.renderTaskView();
+    }
 
 
     initEventListeners() {
         document.getElementById('add-task-button').addEventListener('click', () => this.addTask());
+        document.getElementById('including-done-task-switch').addEventListener('click', () => this.toggleIncludingDoneTasks());
+        const radios = document.getElementsByClassName('order-filter__radio');
+        [...document.getElementsByClassName('order-filter__radio')].forEach(radio => {
+            radio.onclick = () => {this.sortTasks(radio.value)}
+        })
     }
 
     addTask() {
@@ -88,10 +104,9 @@ export class TaskController {
                 break;
         }
 
-        console.log('Hello');
         this.tasks.push({
             title: 'Lorem Impsum',
-            status,
+            status: 'ok',
             priority: 'Low',
             dueDate: '14.05.2020',
             createdAt: '10.04.2020',
@@ -100,19 +115,29 @@ export class TaskController {
         this.renderTaskView();
     }
 
-    init() {
+    toggleIncludingDoneTasks() {
+        this.includingDoneTask = !this.includingDoneTask;
+        this.visibleTasks = this.tasks.filter(task => this.includingDoneTask || task.status !== 'done');
+        this.renderTaskView();
+    }
+
+    async init() {
+        this.tasks = await this.taskService.getAll();
+        console.log('task', this.tasks);
+        this.visibleTasks = this.tasks.filter(task => this.includingDoneTask || task.status !== 'done');
         this.renderTaskView();
     }
 
     async renderTaskView() {
         this.taskContainer.innerHTML = this.taskTemplateCompiled({
-            includingDoneTask: false,
-            tasks: this.tasks,
+            includingDoneTask: this.includingDoneTask,
+            tasks: this.visibleTasks,
+            orderStrategy: this.orderStrategy,
         });
         this.initEventListeners();
     }
 
-    static bootstrap({taskService}) {
-        new TaskController(taskService).init()
+    static async bootstrap({taskService}) {
+        await new TaskController(taskService).init()
     }
 }
