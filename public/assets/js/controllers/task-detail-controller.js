@@ -1,6 +1,6 @@
 export class TaskDetailController {
 
-    constructor(taskService) {
+    constructor(taskService, router) {
         this.template = `
 <div>
     <section class="container">
@@ -35,12 +35,15 @@ export class TaskDetailController {
 `;
 
         this.taskService = taskService;
+        this.router = router;
+        this.isEditing = false;
+        this.editingTask = null;
         this.container = document.querySelector('#main');
         this.templateCompiled = Handlebars.compile(this.template);
     }
 
     async registerEvenListener() {
-        document.getElementById('task-form').addEventListener('submit', (e) => {
+        document.getElementById('task-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const a = {
                 title: e.target.title.value,
@@ -49,20 +52,45 @@ export class TaskDetailController {
                 priority: e.target.priority.value,
             };
 
-            this.taskService.create(a);
+
+            try {
+                this.isEditing ? await this.taskService.update({...this.editingTask, ...a}) : await this.taskService.create(a);
+            } catch {
+
+            }
+
+            this.router.navigate('home');
         });
     }
 
     async init() {
         this.renderTaskView();
+
+        const idParam = window.location.hash.slice(1).split(':')[1] || null;
+        if (idParam) {
+            this.isEditing = true;
+            this.editingTask = await this.taskService.getById(idParam);
+            this.fillForm(this.editingTask);
+        }
+
         this.registerEvenListener();
+    }
+
+    fillForm(task) {
+        const form = document.getElementById('task-form');
+        console.log(task);
+        form.title.value = task.title;
+        form.dueDate.value = task.dueDate;
+        form.description.value = task.description;
+        form.priority.value = task.priority;
+
     }
 
     async renderTaskView() {
         this.container.innerHTML = this.templateCompiled();
     }
 
-    static async bootstrap({taskService}) {
-        await new TaskDetailController(taskService).init()
+    static async bootstrap({taskService, router}) {
+        await new TaskDetailController(taskService, router).init()
     }
 }

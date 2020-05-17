@@ -38,8 +38,9 @@
     --color-black-8: #888888;
     --color-full-black: #000000;
 
-    --color-yellow: #e6e600;
 
+    --color-yellow: #e6e600;
+    --color-yellow-2: #E1B803;
 
     --color-gradient-primary: linear-gradient(to right, #2989d8 0%,#1e5799 49%,#2989d8 100%);
     --color-gradient-inverted: linear-gradient(to right,#1e5799 0%,#2989d8 49%,#1e5799 100%);

@@ -17,4 +17,8 @@ export default class HttpService {
     post(url, data) {
         return this.ajax('post', url, data);
     }
+
+    put(url, data) {
+        return this.ajax('put', url, data);
+    }
 }
