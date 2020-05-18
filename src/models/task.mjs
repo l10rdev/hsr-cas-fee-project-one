@@ -34,3 +34,7 @@ export function update(taskId, task) {
 export function remove(taskId, task) {
   database.remove({ _id: taskId });
 }
+
+export function clearAll(taskId, task) {
+  database.remove({});
+}

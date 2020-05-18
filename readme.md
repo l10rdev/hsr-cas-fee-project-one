@@ -13,6 +13,7 @@ See deployment for notes on how to deploy the project on a live system.
 ## App Preview
 There is an Preview of this app on Heroku: https://cas-hsr-fee-project-1.herokuapp.com/
 The loading can take some time due to Herokus free service.
+The Task will be cleared every day at midnight.
 
 ### Prerequisites
 

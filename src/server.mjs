@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import path from 'path';
 import * as Task from './models/task.mjs';
+import cron from 'node-cron';
 
 
 const dirname = path.resolve();
@@ -42,11 +43,15 @@ app.delete('/v1/tasks/:id', async (req, res) => {
   res.send({});
 });
 
-app.use('/', express.static(`${dirname}/public`));
+app.use('/', express.static(`${dirname}/src/public`));
 
 app.get('*', (req, res) => {
-  res.sendfile(`${dirname}/public/index.html`);
+  res.sendfile(`${dirname}/src/public/index.html`);
 });
 
+cron.schedule('00 00 * * *', function () {
+  Task.clearAll();
+});
 
 app.listen(port);
+
