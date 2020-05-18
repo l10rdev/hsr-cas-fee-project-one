@@ -1,9 +1,8 @@
-import {compareByDueDate, compareByCreationDate, compareByImportance} from '../helpers.js';
+import { sortTasks } from "../helpers.js";
 
-export class TaskController {
-
-    constructor(taskService, router) {
-        this.template = `
+export default class TaskController {
+  constructor(taskService, router) {
+    this.template = `
 <div>
     <section class="container">
         <h1 class="welcome-message">Good Morning! <br /> Get It Done</h1>
@@ -17,7 +16,7 @@ export class TaskController {
                 <input type="radio"  class="order-filter__radio" id="importance" name="order-filter" value="importance"  {{#ifEquals orderStrategy "importance"}} checked {{/ifEquals}}>
                 <label class="order-filter__label" for="importance">Importance</label>
             </div>
-                    
+
             <button id="including-done-task-switch" class="btn filters__inExcluding-filter {{#if includingDoneTask}} filters__inExcluding-filter--including {{else}} filters__inExcluding-filter--excluding {{/if}}">
                {{#if includingDoneTask}}Exclude completed tasks {{else}} Inclucde completed tasks{{/if}}
             </button>
@@ -39,23 +38,23 @@ export class TaskController {
                         <div class="task__title">
                             {{title}}
                         </div>
-                        
-                        
+
+
                         <div>
                             {{renderDueDate dueDate}}
                         </div>
-                        
+
                         <div class="task__description">
                             {{description}}
                         </div>
-                        
+
                         <div class="task__actions">
                             {{#if done}}
-                              <button class="action action__state-toggle" data-id="{{_id}}">Reopen</button>                          
+                              <button class="action action__state-toggle" data-id="{{_id}}">Reopen</button>
                              {{else}}
-                             <button class="action action__state-toggle" data-id="{{_id}}">Set Complete</button> 
+                             <button class="action action__state-toggle" data-id="{{_id}}">Set Complete</button>
                              {{/if}}
-                            |   
+                            |
                             <button class="action action__edit" data-id="{{_id}}">Edit</button>
                         </div>
 
@@ -76,120 +75,83 @@ export class TaskController {
     <button id="add-task-button" class="btn add-button">+</button>
 `;
 
-        this.taskService = taskService;
-        this.router = router;
-        console.log('servies', taskService);
-        this.taskTemplateCompiled = Handlebars.compile(this.template);
-        this.taskContainer = document.querySelector('#main');
-        this.visibleTasks = [];
-        this.orderStrategy = 'finish-date';
-        this.includingDoneTask = false;
-    }
+    this.taskService = taskService;
+    this.router = router;
+    this.taskTemplateCompiled = Handlebars.compile(this.template);
+    this.taskContainer = document.querySelector('#main');
+    this.visibleTasks = [];
+    this.orderStrategy = 'finish-date';
+    this.includingDoneTask = false;
+  }
 
-    sortTasks(orderStrategy) {
-        this.orderStrategy = orderStrategy;
-        const orderStrategyMap = {
-            'creation-date': compareByCreationDate,
-            'importance': compareByImportance,
-            'finish-date': compareByDueDate,
-        };
-        this.visibleTasks = [...this.visibleTasks].sort(orderStrategyMap[orderStrategy]);
+  initEventListeners() {
+    document.getElementById('including-done-task-switch').addEventListener('click', () => this.toggleIncludingDoneTasks());
+    document.getElementById('add-task-button').addEventListener('click', () => this.navigateToDetail());
+
+    document.getElementById('add-task-button').addEventListener('click', () => this.navigateToDetail());
+    document.getElementById('add-task-button').addEventListener('click', () => this.navigateToDetail());
+
+    [...document.getElementsByClassName('order-filter__radio')].forEach((radio) => {
+      radio.onclick = () => {
+        this.orderStrategy = radio.value;
         this.renderTaskView();
+      };
+    });
+
+    [...document.getElementsByClassName('action__state-toggle')].forEach((task) => {
+      task.onclick = () => {
+        const a = this.tasks.find((b) => b._id === task.dataset.id);
+        this.taskDoneToggle(a);
+      };
+    });
+
+    [...document.getElementsByClassName('action action__edit')].forEach((task) => {
+      task.onclick = () => {
+        this.navigateToDetail(task.dataset.id);
+      };
+    });
+  }
+
+  async taskDoneToggle(task) {
+    // Optimistic Update
+    task.done = !task.done;
+    this.renderTaskView();
+
+    try {
+      await this.taskService.update(task);
+    } catch (e) {
+      // Undo Optimistic Update
+      task.done = !task.done;
+      this.renderTaskView();
     }
+  }
 
+  toggleIncludingDoneTasks() {
+    this.includingDoneTask = !this.includingDoneTask;
+    this.renderTaskView();
+  }
 
-    initEventListeners() {
-        document.getElementById('add-task-button').addEventListener('click', () => this.addTask());
-        document.getElementById('including-done-task-switch').addEventListener('click', () => this.toggleIncludingDoneTasks());
-        document.getElementById('add-task-button').addEventListener('click', () => this.navigateToDetail());
+  navigateToDetail(id) {
+    this.router.navigate(`task${id ? `:${id}` : ''}`);
+  }
 
-        document.getElementById('add-task-button').addEventListener('click', () => this.navigateToDetail());
-        document.getElementById('add-task-button').addEventListener('click', () => this.navigateToDetail());
+  async init() {
+    this.tasks = await this.taskService.getAll();
+    this.renderTaskView();
+  }
 
-        [...document.getElementsByClassName('order-filter__radio')].forEach(radio => {
-            radio.onclick = () => {this.sortTasks(radio.value)}
-        });
+  async renderTaskView() {
+    this.visibleTasks = this.tasks.filter((task) => this.includingDoneTask || !task.done);
+    this.visibleTasks = sortTasks(this.visibleTasks, this.orderStrategy);
+    this.taskContainer.innerHTML = this.taskTemplateCompiled({
+      includingDoneTask: this.includingDoneTask,
+      tasks: this.visibleTasks,
+      orderStrategy: this.orderStrategy,
+    });
+    this.initEventListeners();
+  }
 
-        [...document.getElementsByClassName('action__state-toggle')].forEach(task => {
-            task.onclick = () => {
-                const a = this.tasks.find((b) => b._id === task.dataset.id);
-                this.taskDoneToggle(a);
-            }
-        });
-
-        [...document.getElementsByClassName('action action__edit')].forEach(task => {
-            task.onclick = () => {
-                this.navigateToDetail(task.dataset.id);
-            }
-        });
-    }
-
-    addTask() {
-        let status = '';
-        switch(this.tasks.length % 3) {
-            case 0:
-                status = 'ok';
-                break;
-            case 1:
-                status = 'endanger';
-                break;
-            case 2:
-                status = 'late';
-                break;
-        }
-
-        this.tasks.push({
-            title: 'Lorem Impsum',
-            status: 'ok',
-            priority: 'Low',
-            dueDate: '14.05.2020',
-            createdAt: '10.04.2020',
-        });
-
-        this.renderTaskView();
-    }
-
-    async taskDoneToggle(task) {
-        //Optimistic Update
-        task.done = !task.done;
-        this.renderTaskView();
-
-        try {
-            await this.taskService.update(task);
-        } catch (e) {
-            //Undo Optimistic Update
-            task.done = !task.done;
-            this.renderTaskView();
-        }
-    }
-
-
-    toggleIncludingDoneTasks() {
-        this.includingDoneTask = !this.includingDoneTask;
-        this.renderTaskView();
-    }
-
-    navigateToDetail(id) {
-        this.router.navigate(`task${id ? ':' + id : ''}`);
-    }
-
-    async init() {
-        this.tasks = await this.taskService.getAll();
-        console.log('task', this.tasks);
-        this.renderTaskView();
-    }
-
-    async renderTaskView() {
-        this.visibleTasks = this.tasks.filter(task => this.includingDoneTask || !task.done);
-        this.taskContainer.innerHTML = this.taskTemplateCompiled({
-            includingDoneTask: this.includingDoneTask,
-            tasks: this.visibleTasks,
-            orderStrategy: this.orderStrategy,
-        });
-        this.initEventListeners();
-    }
-
-    static async bootstrap({taskService, router}) {
-        await new TaskController(taskService, router).init()
-    }
+  static async bootstrap({ taskService, router }) {
+    await new TaskController(taskService, router).init();
+  }
 }

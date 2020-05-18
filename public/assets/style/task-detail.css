@@ -1,9 +1,22 @@
+:root {
+    --label-color: var(--color-black-3);
+    --background-input: var(--color-full-white);
+    --color-input:  var(--color-black-3);
+
+}
+[data-theme="dark"] {
+    --label-color: var(--color-white);
+    --background-input: var(--color-black);
+    --color-input:  var(--color-white);
+}
+
 .task-form {
     display: flex;
     flex-direction: column;
 }
 
 .task-form__label {
+    color: var(--label-color);
     font-size: var(--font-size-medium);
     font-family: var(--font-main);
     margin-bottom: var(--spacing-small);
@@ -12,6 +25,8 @@
 
 .task-form__input, .task-form__textarea {
      height: 40px;
+    background-color: var(--background-input);
+    color: var(--color-input);
      padding-left: var(--spacing-small);
      font-size: var(--font-size-medium);
      font-family: var(--font-main);
@@ -42,5 +57,10 @@
 }
 
 .radio-group__label {
+    color: var(--label-color);
     margin-left: var(--spacing-medium);
+}
+
+.task-form__submit {
+    box-shadow: none;
 }

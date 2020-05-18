@@ -1,22 +1,23 @@
-export class HeaderController {
+export default class HeaderController {
+  constructor() {
+    this.document = window.document;
+  }
 
-   addEventListeners() {
-        document.querySelector('.header__them-switcher--light').addEventListener('click', () => {
-            console.log('test');
-            document.documentElement.setAttribute('data-theme', 'dark');
-        });
+  addEventListeners() {
+    this.document.querySelector('.header__them-switcher--light').addEventListener('click', () => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    });
 
-        document.querySelector('.header__them-switcher--dark').addEventListener('click', () => {
-            console.log('test');
-            document.documentElement.removeAttribute('data-theme');
-        });
-    }
+    this.document.querySelector('.header__them-switcher--dark').addEventListener('click', () => {
+      document.documentElement.removeAttribute('data-theme');
+    });
+  }
 
-    init() {
-        this.addEventListeners();
-    }
+  init() {
+    this.addEventListeners();
+  }
 
-    static bootstrap() {
-        new HeaderController().init()
-    }
+  static bootstrap() {
+    new HeaderController().init();
+  }
 }
