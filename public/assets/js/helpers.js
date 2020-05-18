@@ -1,7 +1,7 @@
 
 export function compareByDueDate(a, b) {
-  const dateA = moment(a.dueDate, 'DD.MM.YYYY');
-  const dateB = moment(b.dueDate, 'DD.MM.YYYY');
+  const dateA = moment(a.dueDate, 'YYYY-MM-DD');
+  const dateB = moment(b.dueDate, 'YYYY-MM-DD');
 
   const differenceInDays = dateA.diff(dateB, 'days');
 
@@ -13,10 +13,10 @@ export function compareByDueDate(a, b) {
 }
 
 export function compareByCreationDate(a, b) {
-  const dateA = moment(a.createdAt, 'DD.MM.YYYY');
-  const dateB = moment(b.createdAt, 'DD.MM.YYYY');
+  const dateA = moment(a.createdAt, 'YYYY-MM-DD');
+  const dateB = moment(b.createdAt, 'YYYY-MM-DD');
 
-  const differenceInDays = dateA.diff(dateB, 'days');
+  const differenceInDays = dateB.diff(dateA, 'days');
 
   if (differenceInDays !== 0) {
     return differenceInDays;

@@ -30,3 +30,7 @@ export function create(task) {
 export function update(taskId, task) {
   database.update({ _id: taskId }, { ...task });
 }
+
+export function remove(taskId, task) {
+  database.remove({ _id: taskId });
+}

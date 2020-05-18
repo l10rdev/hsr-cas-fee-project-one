@@ -1,11 +1,17 @@
 export default class HttpService {
+  // eslint-disable-next-line class-methods-use-this
   ajax(method, url, data, headers) {
     const fetchHeaders = new Headers({ 'content-type': 'application/json', ...(headers || {}) });
     return fetch(url, {
       method,
       headers: fetchHeaders,
       body: JSON.stringify(data),
-    }).then((res) => res.json() || {});
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error();
+      }
+      return res.json() || {};
+    });
   }
 
   get(url) {
@@ -18,5 +24,9 @@ export default class HttpService {
 
   put(url, data) {
     return this.ajax('put', url, data);
+  }
+
+  delete(url) {
+    return this.ajax('delete', url);
   }
 }

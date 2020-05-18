@@ -218,6 +218,7 @@
 .action {
     background: none;
     border: none;
+    cursor: pointer;
 }
 
 .action__state-toggle {
@@ -226,6 +227,10 @@
 
 .action__edit {
     color:  var(--color-edit);
+}
+
+.action__delete {
+    color:  var(--color-danger);
 }
 
 .add-button {

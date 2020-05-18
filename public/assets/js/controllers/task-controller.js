@@ -1,4 +1,4 @@
-import { sortTasks } from "../helpers.js";
+import { sortTasks } from '../helpers.js';
 
 export default class TaskController {
   constructor(taskService, router) {
@@ -56,6 +56,8 @@ export default class TaskController {
                              {{/if}}
                             |
                             <button class="action action__edit" data-id="{{_id}}">Edit</button>
+                            |
+                            <button class="action action__delete" data-id="{{_id}}">Delete</button>
                         </div>
 
                         <div class="task__creation">
@@ -110,6 +112,13 @@ export default class TaskController {
         this.navigateToDetail(task.dataset.id);
       };
     });
+
+    [...document.getElementsByClassName('action action__delete')].forEach((task) => {
+      task.onclick = () => {
+        const a = this.tasks.find((b) => b._id === task.dataset.id);
+        this.deleteTask(a);
+      };
+    });
   }
 
   async taskDoneToggle(task) {
@@ -122,6 +131,20 @@ export default class TaskController {
     } catch (e) {
       // Undo Optimistic Update
       task.done = !task.done;
+      this.renderTaskView();
+    }
+  }
+
+  async deleteTask(task) {
+    // Optimistic Update
+    this.tasks = this.tasks.filter((a) => a._id !== task._id);
+    this.renderTaskView();
+
+    try {
+      await this.taskService.delete(task);
+    } catch (e) {
+      // Undo Optimistic Update
+      this.tasks = [...this.tasks, task];
       this.renderTaskView();
     }
   }

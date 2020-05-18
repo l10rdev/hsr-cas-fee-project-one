@@ -40,7 +40,6 @@ export default class TaskDetailController {
     this.error = null;
     this.container = document.querySelector('#main');
     this.templateCompiled = Handlebars.compile(this.template);
-    this.form = document.getElementById('task-form');
   }
 
   async registerEvenListener() {
@@ -55,10 +54,14 @@ export default class TaskDetailController {
 
 
       try {
-        this.isEditing ? await this.taskService.update({ ...this.editingTask, ...a })
-          : await this.taskService.create(a);
+        if (this.isEditing) {
+          await this.taskService.update({ ...this.editingTask, ...a });
+        } else {
+          await this.taskService.create(a);
+        }
         this.router.navigate('home');
       } catch (error) {
+        // eslint-disable-next-line no-alert
         alert('An Error occurred. Pleas try again in couple minutes.');
       }
     });
@@ -86,6 +89,7 @@ export default class TaskDetailController {
 
   async renderTaskView() {
     this.container.innerHTML = this.templateCompiled();
+    this.form = document.getElementById('task-form');
   }
 
   static async bootstrap({ taskService, router }) {

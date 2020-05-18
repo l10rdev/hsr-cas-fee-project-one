@@ -85,4 +85,3 @@ Handlebars.registerHelper('renderStatus', (dueDate, isDone) => {
 
   return new Handlebars.SafeString('<div class="task__status task__status--open">Open</div>');
 });
-

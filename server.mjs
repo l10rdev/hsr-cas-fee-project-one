@@ -37,6 +37,11 @@ app.put('/v1/tasks/:id', async (req, res) => {
   res.send({});
 });
 
+app.delete('/v1/tasks/:id', async (req, res) => {
+  await Task.remove(req.params.id);
+  res.send({});
+});
+
 app.use('/', express.static(`${dirname}/public`));
 
 app.get('*', (req, res) => {
