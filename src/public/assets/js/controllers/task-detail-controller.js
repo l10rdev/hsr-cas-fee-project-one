@@ -61,6 +61,7 @@ export default class TaskDetailController {
         }
         this.router.navigate('home');
       } catch (error) {
+        console.log(error);
         // eslint-disable-next-line no-alert
         alert('An Error occurred. Pleas try again in couple minutes.');
       }

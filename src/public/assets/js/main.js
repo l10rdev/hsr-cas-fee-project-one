@@ -13,7 +13,7 @@ const routes = {
 };
 
 const services = {
-  taskService: new TaskService(new HttpService(), '/v1/tasks'),
+  taskService: new TaskService(new HttpService(), '/api/v1/tasks'),
   router: new Router(),
 };
 
