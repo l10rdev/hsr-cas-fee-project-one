@@ -93,11 +93,16 @@ export default class TaskController {
     document.getElementById('add-task-button').addEventListener('click', () => this.navigateToDetail());
     document.getElementById('add-task-button').addEventListener('click', () => this.navigateToDetail());
 
-    [...document.getElementsByClassName('order-filter__radio')].forEach((radio) => {
-      radio.onclick = () => {
+    document.querySelectorAll('.order-filter__radio').forEach((radio) => {
+      console.log('test');
+      /*radio.onclick = () => {
         this.orderStrategy = radio.value;
         this.renderTaskView();
-      };
+      };*/
+      radio.addEventListeners(() => {
+        this.orderStrategy = radio.value;
+        this.renderTaskView();
+      })
     });
 
     [...document.getElementsByClassName('action__state-toggle')].forEach((task) => {

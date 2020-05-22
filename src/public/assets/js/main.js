@@ -5,6 +5,8 @@ import HttpService from './services/http-service.js';
 import NotFoundController from './controllers/404-controller.js';
 import TaskDetailController from './controllers/task-detail-controller.js';
 import Router from './core/router.js';
+import LocalStorageService from "./services/local-service.js";
+import ThemeService from "./services/theme-service.js";
 
 const routes = {
   home: TaskController,
@@ -15,12 +17,13 @@ const routes = {
 const services = {
   taskService: new TaskService(new HttpService(), '/api/v1/tasks'),
   router: new Router(),
+  themeService: new ThemeService(new LocalStorageService()),
 };
 
 document.addEventListener('DOMContentLoaded', () => {
   const location = window.location.hash.slice(1).split(':')[0] || 'home';
 
-  HeaderController.bootstrap();
+  HeaderController.bootstrap(services);
   (routes[location] || routes['404']).bootstrap(services);
 });
 
