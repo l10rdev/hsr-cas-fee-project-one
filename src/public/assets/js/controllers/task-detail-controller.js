@@ -35,35 +35,31 @@ export default class TaskDetailController {
 
     this.taskService = taskService;
     this.router = router;
-    this.isEditing = false;
     this.editingTask = null;
-    this.error = null;
     this.container = document.querySelector('#main');
     this.templateCompiled = Handlebars.compile(this.template);
   }
 
   async registerEvenListener() {
-    document.getElementById('task-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    document.querySelector('#task-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
       const a = {
-        title: e.target.title.value,
-        dueDate: e.target.dueDate.value,
-        description: e.target.description.value,
-        priority: e.target.priority.value,
+        title: event.target.title.value,
+        dueDate: event.target.dueDate.value,
+        description: event.target.description.value,
+        priority: event.target.priority.value,
       };
 
-
       try {
-        if (this.isEditing) {
+        if (this.editingTask) {
           await this.taskService.update({ ...this.editingTask, ...a });
         } else {
           await this.taskService.create(a);
         }
         this.router.navigate('home');
       } catch (error) {
-        console.log(error);
         // eslint-disable-next-line no-alert
-        alert('An Error occurred. Pleas try again in couple minutes.');
+        alert('An Error occurred. Pleas check your input and try again in couple minutes.');
       }
     });
   }
@@ -73,7 +69,6 @@ export default class TaskDetailController {
 
     const idParam = window.location.hash.slice(1).split(':')[1] || null;
     if (idParam) {
-      this.isEditing = true;
       this.editingTask = await this.taskService.getById(idParam);
       this.fillForm(this.editingTask);
     }

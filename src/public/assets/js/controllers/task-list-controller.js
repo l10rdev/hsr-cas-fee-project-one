@@ -1,20 +1,20 @@
 import { sortTasks } from '../helpers.js';
 
-export default class TaskController {
+export default class TaskListController {
   constructor(taskService, router) {
     this.template = `
 <div>
     <section class="container">
-        <h1 class="welcome-message">Good Morning! <br /> Get It Done</h1>
+        <h1 class="welcome-message">{{renderGreeting}} <br /> Get your tasks done!</h1>
         <hr class="space-bar">
         <div class="filters">
             <div class="filters__order-filter">
-                <input type="radio" class="order-filter__radio" id="finish-date" name="order-filter" value="finish-date" {{#ifEquals orderStrategy "finish-date"}} checked {{/ifEquals}}>
-                <label class="order-filter__label" for="finish-date"> Due Date</label>
-                <input type="radio"  class="order-filter__radio" id="creation-date" name="order-filter" value="creation-date"   {{#ifEquals orderStrategy "creation-date"}} checked {{/ifEquals}}>
+                <input type="radio" class="order-filter__radio" id="due-date" name="order-filter" value="dueDate" {{#ifEquals orderStrategy "dueDate"}} checked {{/ifEquals}}>
+                <label class="order-filter__label" for="due-date"> Due Date</label>
+                <input type="radio"  class="order-filter__radio" id="creation-date" name="order-filter" value="creationDate"   {{#ifEquals orderStrategy "creationDate"}} checked {{/ifEquals}}>
                 <label class="order-filter__label" for="creation-date">Creation Date</label>
-                <input type="radio"  class="order-filter__radio" id="importance" name="order-filter" value="importance"  {{#ifEquals orderStrategy "importance"}} checked {{/ifEquals}}>
-                <label class="order-filter__label" for="importance">Importance</label>
+                <input type="radio"  class="order-filter__radio" id="priority" name="order-filter" value="priority"  {{#ifEquals orderStrategy "priority"}} checked {{/ifEquals}}>
+                <label class="order-filter__label" for="priority">Priority</label>
             </div>
 
             <button id="including-done-task-switch" class="btn filters__inExcluding-filter {{#if includingDoneTask}} filters__inExcluding-filter--including {{else}} filters__inExcluding-filter--excluding {{/if}}">
@@ -29,7 +29,7 @@ export default class TaskController {
                 <div class="task">
                     <div class="task__content">
                         <div class="task__header">
-                            <div class="task__importance">
+                            <div class="task__priority">
                                 {{renderPriority priority}}
                             </div>
                             {{renderStatus dueDate done}}
@@ -50,25 +50,25 @@ export default class TaskController {
 
                         <div class="task__actions">
                             {{#if done}}
-                              <button class="action action__state-toggle" data-id="{{_id}}">Reopen</button>
+                              <button class="action action__state-toggle" data-id="{{_id}}" data-action="toggleState">Reopen</button>
                              {{else}}
-                             <button class="action action__state-toggle" data-id="{{_id}}">Set Complete</button>
+                             <button class="action action__state-toggle" data-id="{{_id}}" data-action="toggleState">Set Complete</button>
                              {{/if}}
                             |
-                            <button class="action action__edit" data-id="{{_id}}">Edit</button>
+                            <button class="action action__edit" data-id="{{_id}}" data-action="edit">Edit</button>
                             |
-                            <button class="action action__delete" data-id="{{_id}}">Delete</button>
+                            <button class="action action__delete" data-id="{{_id}}" data-action="delete">Delete</button>
                         </div>
 
                         <div class="task__creation">
-                           {{createdAtText createdAt}}
+                           {{renderCreatedAt createdAt}}
                         </div>
                     </div>
                 </div>
             {{/each}}
         {{else}}
             <div class="task-list__block--empty">
-                <img class="task-list__block-image" src="assets/img/getan.svg" alt="Darth Vader"  on/>
+                <img class="task-list__block-image" src="assets/img/complete.svg" alt="Everything Completed"  on/>
                 You have no task. <br /> Enjoy your free day.
             </div>
         {{/if}}
@@ -82,47 +82,44 @@ export default class TaskController {
     this.taskTemplateCompiled = Handlebars.compile(this.template);
     this.taskContainer = document.querySelector('#main');
     this.visibleTasks = [];
-    this.orderStrategy = 'finish-date';
+    this.orderStrategy = 'dueDate';
     this.includingDoneTask = false;
   }
 
   initEventListeners() {
-    document.getElementById('including-done-task-switch').addEventListener('click', () => this.toggleIncludingDoneTasks());
-    document.getElementById('add-task-button').addEventListener('click', () => this.navigateToDetail());
+    document.querySelector('#including-done-task-switch').addEventListener('click', () => this.toggleIncludingDoneTasks());
+    document.querySelector('#add-task-button').addEventListener('click', () => this.navigateToDetail());
 
-    document.getElementById('add-task-button').addEventListener('click', () => this.navigateToDetail());
-    document.getElementById('add-task-button').addEventListener('click', () => this.navigateToDetail());
-
-    document.querySelectorAll('.order-filter__radio').forEach((radio) => {
-      console.log('test');
-      /*radio.onclick = () => {
-        this.orderStrategy = radio.value;
+    document.querySelector('.filters__order-filter').addEventListener('click', (event) => {
+      const orderStrategy = event.target.value;
+      if (orderStrategy) {
+        this.orderStrategy = orderStrategy;
+        this.visibleTasks = [];
         this.renderTaskView();
-      };*/
-      radio.addEventListeners(() => {
-        this.orderStrategy = radio.value;
-        this.renderTaskView();
-      })
+      }
     });
 
-    [...document.getElementsByClassName('action__state-toggle')].forEach((task) => {
-      task.onclick = () => {
-        const a = this.tasks.find((b) => b._id === task.dataset.id);
-        this.taskDoneToggle(a);
-      };
-    });
+    document.querySelector('.task-list').addEventListener('click', (event) => {
+      const { action, id } = event.target.dataset;
+      if (!action || !id) {
+        return;
+      }
 
-    [...document.getElementsByClassName('action action__edit')].forEach((task) => {
-      task.onclick = () => {
-        this.navigateToDetail(task.dataset.id);
-      };
-    });
+      const targetTask = this.tasks.find((task) => task._id === id);
 
-    [...document.getElementsByClassName('action action__delete')].forEach((task) => {
-      task.onclick = () => {
-        const a = this.tasks.find((b) => b._id === task.dataset.id);
-        this.deleteTask(a);
-      };
+      switch (action) {
+        case 'toggleState':
+          this.taskDoneToggle(targetTask);
+          break;
+        case 'edit':
+          this.navigateToDetail(targetTask._id);
+          break;
+        case 'delete':
+          this.deleteTask(targetTask);
+          break;
+        default:
+          throw new Error('unexpected action');
+      }
     });
   }
 
@@ -180,6 +177,6 @@ export default class TaskController {
   }
 
   static async bootstrap({ taskService, router }) {
-    await new TaskController(taskService, router).init();
+    await new TaskListController(taskService, router).init();
   }
 }

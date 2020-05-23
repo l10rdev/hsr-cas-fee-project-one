@@ -5,6 +5,7 @@ export default class NotFoundController {
     <section class="container">
         <h1 class="welcome-message">404</h1>
    </section>
+ </div>
 `;
 
     this.container = document.querySelector('#main');
@@ -12,10 +13,10 @@ export default class NotFoundController {
   }
 
   async init() {
-    this.renderTaskView();
+    this.renderView();
   }
 
-  async renderTaskView() {
+  async renderView() {
     this.container.innerHTML = this.templateCompiled();
   }
 

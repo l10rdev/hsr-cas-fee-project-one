@@ -3,11 +3,11 @@ export default class ThemeService {
     this.service = service;
   }
 
- set(theme) {
+  set(theme) {
     this.service.set('theme', theme);
- }
+  }
 
- get() {
-   return this.service.get('theme');
- }
+  get() {
+    return this.service.get('theme');
+  }
 }

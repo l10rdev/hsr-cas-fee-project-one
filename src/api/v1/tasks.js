@@ -12,7 +12,7 @@ taskRoutes.get('/', async (_req, res) => {
 taskRoutes.get('/:id', async (req, res) => {
   try {
     return res.send(await TaskService.getById(req.params.id));
-  } catch (e) {
+  } catch (_error) {
     return res.sendStatus(500);
   }
 });

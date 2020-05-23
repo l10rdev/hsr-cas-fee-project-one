@@ -1,7 +1,7 @@
 
-export function compareByDueDate(a, b) {
-  const dateA = moment(a.dueDate, 'YYYY-MM-DD');
-  const dateB = moment(b.dueDate, 'YYYY-MM-DD');
+export function compareByDueDate(a, b, comparator = moment) {
+  const dateA = comparator(a.dueDate, 'YYYY-MM-DD');
+  const dateB = comparator(b.dueDate, 'YYYY-MM-DD');
 
   const differenceInDays = dateA.diff(dateB, 'days');
 
@@ -12,37 +12,34 @@ export function compareByDueDate(a, b) {
   return a.priority - b.priority;
 }
 
-export function compareByCreationDate(a, b) {
-  const dateA = moment(a.createdAt, 'YYYY-MM-DD');
-  const dateB = moment(b.createdAt, 'YYYY-MM-DD');
+export function compareByCreationDate(a, b, comparator = moment) {
+  const dateA = comparator(a.createdAt, 'YYYY-MM-DD HH:mm:ss');
+  const dateB = comparator(b.createdAt, 'YYYY-MM-DD HH:mm:ss');
 
-  const differenceInDays = dateB.diff(dateA, 'days');
+  const differenceInSeconds = dateB.diff(dateA, 'seconds');
 
-  if (differenceInDays !== 0) {
-    return differenceInDays;
+  if (differenceInSeconds !== 0) {
+    return differenceInSeconds;
   }
 
-  return a.priority - b.priority;
+  return compareByDueDate(a, b, comparator);
 }
 
-export function compareByImportance(a, b) {
+export function compareByPriority(a, b, comparator = moment) {
   const differenceInPriority = a.priority - b.priority;
 
   if (differenceInPriority !== 0) {
     return differenceInPriority;
   }
 
-  const dateA = moment(a.dueDate, 'DD.MM.YYYY');
-  const dateB = moment(b.dueDate, 'DD.MM.YYYY');
-
-  return dateA.diff(dateB, 'days');
+  return compareByDueDate(a, b, comparator);
 }
 
-export function sortTasks(tasks, orderStrategy) {
+export function sortTasks(tasks, orderStrategy, comparator = moment) {
   const orderStrategyMap = {
-    'creation-date': compareByCreationDate,
-    importance: compareByImportance,
-    'finish-date': compareByDueDate,
+    creationDate: compareByCreationDate,
+    priority: compareByPriority,
+    dueDate: compareByDueDate,
   };
-  return [...tasks].sort(orderStrategyMap[orderStrategy]);
+  return [...tasks].sort((a, b) => orderStrategyMap[orderStrategy](a, b, comparator));
 }

@@ -29,14 +29,16 @@ npm start
 
 ## Running the tests
 
-There are no tests included yet.
-
-### Break down into end to end tests
-
+```
+npm test
+```
 
 
 ### And coding style tests
 
+```
+npm run lint
+```
 
 ## Deployment
 

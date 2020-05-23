@@ -1,10 +1,7 @@
-export default class LocalStorageService {
+export function get(key) {
+  return localStorage.getItem(key);
+}
 
-  get(key) {
-    return localStorage.getItem(key);
-  }
-
-  set(key, value) {
-    localStorage.setItem(key, value);
-  }
+export function set(key, value) {
+  return localStorage.setItem(key, value);
 }

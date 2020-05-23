@@ -193,7 +193,7 @@
   margin-bottom: var(--spacing-large);
 }
 
-.task__importance {
+.task__priority {
     /*background: #2989d8;*/
     font-weight: var(--font-weight-wide);
     font-size: var(--font-size-small);
