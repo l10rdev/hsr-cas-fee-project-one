@@ -19,6 +19,7 @@ const services = {
   taskService: new TaskService(new HttpService(), '/api/v1/tasks'),
   router: Router,
   themeService: new ThemeService(LocalStorageService),
+  localStorageService: LocalStorageService
 };
 
 document.addEventListener('DOMContentLoaded', () => {

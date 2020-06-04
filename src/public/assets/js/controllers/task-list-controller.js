@@ -1,7 +1,7 @@
 import { sortTasks } from '../helpers.js';
 
 export default class TaskListController {
-  constructor(taskService, router) {
+  constructor(taskService, router, localStorageService) {
     this.template = `
 <div>
     <section class="container">
@@ -77,12 +77,13 @@ export default class TaskListController {
     <button id="add-task-button" class="btn add-button">+</button>
 `;
 
+    this.localStorageService = localStorageService;
     this.taskService = taskService;
     this.router = router;
     this.taskTemplateCompiled = Handlebars.compile(this.template);
     this.taskContainer = document.querySelector('#main');
     this.visibleTasks = [];
-    this.orderStrategy = 'dueDate';
+    this.orderStrategy = localStorageService.get('orderStrategy') || 'dueDate';
     this.includingDoneTask = false;
   }
 
@@ -94,6 +95,7 @@ export default class TaskListController {
       const orderStrategy = event.target.value;
       if (orderStrategy) {
         this.orderStrategy = orderStrategy;
+        this.localStorageService.set('orderStrategy', orderStrategy)
         this.visibleTasks = [];
         this.renderTaskView();
       }
@@ -176,7 +178,7 @@ export default class TaskListController {
     this.initEventListeners();
   }
 
-  static async bootstrap({ taskService, router }) {
-    await new TaskListController(taskService, router).init();
+  static async bootstrap({ taskService, router, localStorageService }) {
+    await new TaskListController(taskService, router, localStorageService).init();
   }
 }
