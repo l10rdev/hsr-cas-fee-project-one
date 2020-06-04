@@ -13,7 +13,7 @@ export default class TaskService {
   }
 
   async create(task) {
-    return this.httpService.post(this.baseUrl, task);
+    return this.httpService.post(this.baseUrl, {...task, createdAt: moment().format('YYYY-MM-DD HH:mm:ss')});
   }
 
   async update(task) {

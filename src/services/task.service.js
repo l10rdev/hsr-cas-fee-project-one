@@ -18,7 +18,6 @@ exports.getById = (id) => (new Promise((resolve) => {
 exports.create = (task) => {
   database.insert({
     ...task,
-    createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
   });
 };
 
