@@ -9,15 +9,15 @@ export default class TaskListController {
         <hr class="space-bar">
         <div class="filters">
             <div class="filters__order-filter">
-                <input type="radio" class="order-filter__radio" id="due-date" name="order-filter" value="dueDate" {{#ifEquals orderStrategy "dueDate"}} checked {{/ifEquals}}>
+                <input type="radio" class="order-filter__radio" id="due-date" name="order-filter" value="dueDate" data-action="sortByDueDate" {{#ifEquals orderStrategy "dueDate"}} checked {{/ifEquals}}>
                 <label class="order-filter__label" for="due-date"> Due Date</label>
-                <input type="radio"  class="order-filter__radio" id="creation-date" name="order-filter" value="creationDate"   {{#ifEquals orderStrategy "creationDate"}} checked {{/ifEquals}}>
+                <input type="radio"  class="order-filter__radio" id="creation-date" name="order-filter" value="creationDate" data-action="sortByCreationDate"  {{#ifEquals orderStrategy "creationDate"}} checked {{/ifEquals}}>
                 <label class="order-filter__label" for="creation-date">Creation Date</label>
-                <input type="radio"  class="order-filter__radio" id="priority" name="order-filter" value="priority"  {{#ifEquals orderStrategy "priority"}} checked {{/ifEquals}}>
+                <input type="radio"  class="order-filter__radio" id="priority" name="order-filter" value="priority" data-action="sortByPriority" {{#ifEquals orderStrategy "priority"}} checked {{/ifEquals}}>
                 <label class="order-filter__label" for="priority">Priority</label>
             </div>
 
-            <button id="including-done-task-switch" class="btn filters__inExcluding-filter {{#if includingDoneTask}} filters__inExcluding-filter--including {{else}} filters__inExcluding-filter--excluding {{/if}}">
+            <button id="including-done-task-switch" class="btn filters__inExcluding-filter {{#if includingDoneTask}} filters__inExcluding-filter--including {{else}} filters__inExcluding-filter--excluding {{/if}}" data-action="toggleDoneTasks">
                {{#if includingDoneTask}}Exclude completed tasks {{else}} Inclucde completed tasks{{/if}}
             </button>
         </div>
@@ -74,7 +74,7 @@ export default class TaskListController {
         {{/if}}
     </div>
     </div>
-    <button id="add-task-button" class="btn add-button">+</button>
+    <button id="add-task-button" class="btn add-button" data-action="onAddTask">+</button>
 `;
 
     this.localStorageService = localStorageService;
@@ -88,41 +88,43 @@ export default class TaskListController {
   }
 
   initEventListeners() {
-    document.querySelector('#including-done-task-switch').addEventListener('click', () => this.toggleIncludingDoneTasks());
-    document.querySelector('#add-task-button').addEventListener('click', () => this.navigateToDetail());
-
-    document.querySelector('.filters__order-filter').addEventListener('click', (event) => {
-      const orderStrategy = event.target.value;
-      if (orderStrategy) {
-        this.orderStrategy = orderStrategy;
-        this.localStorageService.set('orderStrategy', orderStrategy)
-        this.visibleTasks = [];
-        this.renderTaskView();
-      }
-    });
-
-    document.querySelector('.task-list').addEventListener('click', (event) => {
-      const { action, id } = event.target.dataset;
-      if (!action || !id) {
-        return;
-      }
-
-      const targetTask = this.tasks.find((task) => task._id === id);
-
-      switch (action) {
-        case 'toggleState':
-          this.taskDoneToggle(targetTask);
-          break;
-        case 'edit':
-          this.navigateToDetail(targetTask._id);
-          break;
-        case 'delete':
+    document.querySelector('#main').addEventListener('click', (event) => {
+      const actions = {
+        'onAddTask': () => this.navigateToDetail(),
+        'toggleDoneTasks': () => this.toggleIncludingDoneTasks(),
+        'sortByDueDate': () => {
+          this.orderStrategy = 'dueDate';
+          this.localStorageService.set('orderStrategy', 'dueDate')
+          this.visibleTasks = [];
+          this.renderTaskView();
+        },
+        'sortByCreationDate': () => {
+          this.orderStrategy = 'creationDate';
+          this.localStorageService.set('orderStrategy', 'creationDate')
+          this.visibleTasks = [];
+          this.renderTaskView();
+        },
+        'sortByPriority': () => {
+          this.orderStrategy = 'priority';
+          this.localStorageService.set('orderStrategy', 'priority')
+          this.visibleTasks = [];
+          this.renderTaskView();
+        },
+        'toggleState': () => {
+          const targetTask = this.tasks.find((task) => task._id === event.target.dataset.id);
+          this.taskDoneToggle(targetTask)
+        },
+        'edit': () => {
+          this.navigateToDetail(event.target.dataset.id);
+        },
+        'delete': () => {
+          const targetTask = this.tasks.find((task) => task._id === event.target.dataset.id);
           this.deleteTask(targetTask);
-          break;
-        default:
-          throw new Error('unexpected action');
+        }
       }
-    });
+      const action = actions[event.target.dataset.action]
+      if (action) action();
+    })
   }
 
   async taskDoneToggle(task) {
@@ -165,6 +167,7 @@ export default class TaskListController {
   async init() {
     this.tasks = await this.taskService.getAll();
     this.renderTaskView();
+    this.initEventListeners();
   }
 
   async renderTaskView() {
@@ -175,7 +178,7 @@ export default class TaskListController {
       tasks: this.visibleTasks,
       orderStrategy: this.orderStrategy,
     });
-    this.initEventListeners();
+    // this.initEventListeners();
   }
 
   static async bootstrap({ taskService, router, localStorageService }) {
