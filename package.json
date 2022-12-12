@@ -27,7 +27,7 @@
   "homepage": "https://github.com/l10rdev/hsr-cas-fee-project-one#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "nedb": "^1.8.0",
     "node-cron": "^2.0.3",
     "moment": "^2.26.0"
